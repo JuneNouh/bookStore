@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace bookStore.Models
 {
     public class Cart
@@ -28,6 +29,37 @@ namespace bookStore.Models
             return new Cart(context) { Id = cartId };
 
         }
+
+        public CartItem GetCartItem(Book book)
+        {
+            return _context.CartItems.SingleOrDefault(ci =>
+            ci.Book.Id == book.Id && ci.CartId == Id);
+
+        }
+
+        public void AddToCart(Book book, int quantity)
+        {
+            var cartItem = GetCartItem(book);
+
+            if (cartItem == null)
+            {
+                cartItem = new CartItem
+                {
+                    Book = book,
+                    Quantity = quantity,
+                    CartId = Id
+
+                };
+                _context.CartItems.Add(cartItem);
+            }
+            else
+            {
+                cartItem.Quantity += quantity;
+            }
+            _context.SaveChanges();
+        }
+
+
         public List<CartItem> GetAllCartItems()
         {
             return CartItems ??
@@ -35,6 +67,7 @@ namespace bookStore.Models
                 .Include(ci => ci.Book)
                 .ToList());
         }
+
         public int GetCartTotal()
         {
             return _context.CartItems
@@ -43,6 +76,9 @@ namespace bookStore.Models
                 .Sum();
 
         }
+
+
+
 
     }
 }
