@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace bookStore.Models
 {
@@ -25,7 +27,22 @@ namespace bookStore.Models
             session.SetString("Id", cartId);
             return new Cart(context) { Id = cartId };
 
+        }
+        public List<CartItem> GetAllCartItems()
+        {
+            return CartItems ??
+                (CartItems = _context.CartItems.Where(c => c.CartId == Id)
+                .Include(ci => ci.Book)
+                .ToList());
+        }
+        public int GetCartTotal()
+        {
+            return _context.CartItems
+                .Where(ci => ci.CartId == Id)
+                .Select(ci => ci.Book.Price * ci.Quantity)
+                .Sum();
 
         }
+
     }
 }
