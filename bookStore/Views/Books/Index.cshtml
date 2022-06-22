@@ -5,7 +5,7 @@
 
     string HasImage(Book book)
     {
-        if (book.ImageUrl != null)
+        if (book.ImageUrl!="" && book.ImageUrl != null)
         {
             return "fa-solid fa-check";
         }
