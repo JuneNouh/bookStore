@@ -16,7 +16,7 @@ namespace bookStore.Controllers
         }
         public IActionResult Index()
         {
-            var items = _cart.GetCartItem();
+            var items = _cart.GetAllCartItems();
             _cart.CartItems = items;
 
             return View(_cart);
@@ -29,7 +29,7 @@ namespace bookStore.Controllers
             {
                 _cart.AddToCart(SelectedBook, 1);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Store");
         }
 
 

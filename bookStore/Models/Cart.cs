@@ -121,13 +121,14 @@ namespace bookStore.Models
             _context.SaveChanges();
         }
 
-        public List<CartItem> GetCartItem()
+        public List<CartItem> GetAllCartItems()
         {
             return CartItems ??
-                (CartItems = _context.CartItems.Where(c => c.CartId == Id)
-                .Include(ci => ci.Book)
-                .ToList());
+                (CartItems = _context.CartItems.Where(ci => ci.CartId == Id)
+                    .Include(ci => ci.Book)
+                    .ToList());
         }
+
 
         public int GetCartTotal()
         {
