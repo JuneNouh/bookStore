@@ -16,7 +16,7 @@ namespace bookStore.Controllers
         }
         public IActionResult Index()
         {
-            var items = _cart.GetAllCartItems();
+            var items = _cart.GetCartItem();
             _cart.CartItems = items;
 
             return View(_cart);
@@ -32,6 +32,50 @@ namespace bookStore.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public IActionResult RemoveFromCart(int id)
+        {
+            var selectedBook = GetBookById(id);
+
+            if (selectedBook != null)
+            {
+                _cart.RemoveFromCart(selectedBook);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ReduceQuantity(int id)
+        {
+            var selectedBook = GetBookById(id);
+
+            if (selectedBook != null)
+            {
+                _cart.ReduceQuantity(selectedBook);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult IncreaseQuantity(int id)
+        {
+            var selectedBook = GetBookById(id);
+
+            if (selectedBook != null)
+            {
+                _cart.IncreaseQuantity(selectedBook);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult ClearCart()
+        {
+            _cart.ClearCart();
+
+            return RedirectToAction("Index");
+        }
 
         public Book GetBookById(int id)
         {
